@@ -9,5 +9,16 @@
     tools:showIn="@layout/app_bar_maps">
 
 
+    <com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout
+        android:id="@+id/mapViewContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout>
 
 </android.support.constraint.ConstraintLayout>
