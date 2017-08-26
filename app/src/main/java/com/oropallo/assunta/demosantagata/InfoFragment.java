@@ -11,7 +11,6 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link InfoFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link InfoFragment#newInstance} factory method to
  * create an instance of this fragment.
