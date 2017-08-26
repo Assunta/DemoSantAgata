@@ -1,10 +1,12 @@
 package com.oropallo.assunta.demosantagata;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -68,6 +70,15 @@ public class InfoFragment extends Fragment {
         //set description
         TextView textViewDesc=(TextView) view.findViewById(R.id.textViewDescriptionInfo);
         textViewDesc.setText(description);
+        ImageButton imageButton=(ImageButton) view.findViewById(R.id.imageButtonInfo);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("Name", title);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
