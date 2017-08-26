@@ -2,14 +2,10 @@ package com.oropallo.assunta.demosantagata;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,12 +19,10 @@ import android.view.MenuItem;
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
 import com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout;
-import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,18 +30,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener {
-    private static final String RECYCLER_VIEW = "RECYCLER_VIEW_MARKER";
-    private static final String FORM_VIEW = "FORM_VIEW_MARKER";
+    private static final String PLACE_1 = "PLACE_1";
+    private static final String PLACE_2 = "PLACE_2";
     private final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 0;
     private MapView mapView;
 
     private InfoWindowManager infoWindowManager;
 
-    private InfoWindow recyclerWindow;
-    private InfoWindow formWindow;
+    private InfoWindow place1;
+    private InfoWindow place2;
 
-    private Location mLastLocation;
-    private Marker mCurrLocationMarker;
 
 
     @Override
@@ -148,11 +140,11 @@ public class MapsActivity extends AppCompatActivity
     public boolean onMarkerClick(Marker marker) {
         InfoWindow infoWindow = null;
         switch (marker.getSnippet()) {
-            case RECYCLER_VIEW:
-                infoWindow = recyclerWindow;
+            case PLACE_1:
+                infoWindow = place1;
                 break;
-            case FORM_VIEW:
-                infoWindow = formWindow;
+            case PLACE_2:
+                infoWindow = place2;
                 break;
         }
 
@@ -181,17 +173,14 @@ public class MapsActivity extends AppCompatActivity
         }
         else{
             googleMap.setMyLocationEnabled(true);
-           //TODO settare il marker per la posizione attuale
         }
 
-
         mapView.onResume();
-
-
         infoWindowManager.onMapReady(googleMap);
 
-        final Marker marker1 = googleMap.addMarker(new MarkerOptions().position(new LatLng(41.089526, 14.504013)).snippet(RECYCLER_VIEW));
-        final Marker marker2 = googleMap.addMarker(new MarkerOptions().position(new LatLng(41.090010, 14.503754)).snippet(FORM_VIEW));
+        //settare tutti i marker per ogni monumento
+        final Marker marker1 = googleMap.addMarker(new MarkerOptions().position(new LatLng(41.089526, 14.504013)).snippet(PLACE_1));
+        final Marker marker2 = googleMap.addMarker(new MarkerOptions().position(new LatLng(41.090010, 14.503754)).snippet(PLACE_2));
 
         final int offsetX = (int) getResources().getDimension(R.dimen.marker_offset_x);
         final int offsetY = (int) getResources().getDimension(R.dimen.marker_offset_y);
@@ -199,10 +188,21 @@ public class MapsActivity extends AppCompatActivity
         final InfoWindow.MarkerSpecification markerSpec =
                 new InfoWindow.MarkerSpecification(offsetX, offsetY);
 
-        recyclerWindow = new InfoWindow(marker1, markerSpec, new InfoFragment());
-        formWindow = new InfoWindow(marker2, markerSpec, new InfoFragment());
+        //creare tutti i fragment per ogni documento
+
+        place1 = new InfoWindow(marker1, markerSpec, setInfoFragment(1));
+        place2 = new InfoWindow(marker2, markerSpec, setInfoFragment(1));
 
         googleMap.setOnMarkerClickListener(this);
+    }
+
+    private InfoFragment setInfoFragment(int index){
+        InfoFragment f1=new InfoFragment();
+        Bundle args = new Bundle();
+        args.putString("title", "Monumento"+index);
+        args.putString("description", "Descrizione"+index);
+        f1.setArguments(args);
+        return f1;
     }
 
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
